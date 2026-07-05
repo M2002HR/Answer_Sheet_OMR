@@ -4,12 +4,21 @@
 
 The batch command processes every supported image in the input directory.
 
+Supported input types:
+
+- PNG
+- JPEG
+- BMP
+- TIFF
+- PDF
+
 For each sample:
 
 - a folder named after the image stem is created
 - `analysis.json` is written inside that folder
 - `grading.json` is written when an answer key is provided
 - debug artifacts are written to `debug/` inside the same sample folder
+- for PDF inputs, the first page is rasterized before analysis
 
 ## Output Structure
 

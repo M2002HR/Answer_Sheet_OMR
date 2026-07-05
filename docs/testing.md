@@ -6,6 +6,8 @@ The current automated tests cover:
 
 - question classification rules
 - synthetic scoring behavior
+- preprocess contrast enhancement
+- PDF image loading
 - template schema validation
 - smoke analysis
 - corner-marker detection on the grayscale sample sheet

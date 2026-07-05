@@ -22,6 +22,8 @@ Top-level shape:
 - `thresholds`
 - `errors`
 
+When runtime overrides are used, the effective thresholds stored in `meta.thresholds` reflect the active analysis settings.
+
 ### `answers`
 
 Each question contains:

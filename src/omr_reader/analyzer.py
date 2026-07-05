@@ -68,13 +68,16 @@ def analyze_sheet(
     template_path: str | Path,
     config_path: str | Path | None = None,
     debug_dir: str | Path | None = None,
+    config: OMRConfig | None = None,
 ) -> AnalysisResult:
-    config = load_config(config_path)
+    active_config = config or load_config(config_path)
     template = load_template(template_path)
-    image = load_image(image_path)
+    image = load_image(image_path, pdf_dpi=active_config.preprocess.pdf_dpi)
     normalized = normalize_image(image)
-    preprocessed = remove_shadows_or_normalize_illumination(normalized)
-    aligned = align_sheet(preprocessed, template, config.alignment)
+    preprocessed = remove_shadows_or_normalize_illumination(
+        normalized, active_config.preprocess
+    )
+    aligned = align_sheet(preprocessed, template, active_config.alignment)
     errors: list[str] = []
 
     if aligned.status == "failed":
@@ -91,7 +94,7 @@ def analyze_sheet(
                     method=aligned.method,
                     diagnostics=aligned.diagnostics,
                 ),
-                thresholds=_thresholds_dict(config),
+                thresholds=_thresholds_dict(active_config),
                 errors=["alignment_failed"],
             ),
             answers=answers,
@@ -104,25 +107,27 @@ def analyze_sheet(
                 template,
                 {question_id: [] for question_id in template.bubbles},
                 answers,
-                config.scoring.dark_pixel_threshold,
+                active_config.scoring.dark_pixel_threshold,
             )
         return result
 
     bubble_scores: dict[str, list[BubbleScore]] = {}
     all_scores: list[BubbleScore] = []
     for question_id, bubbles in template.bubbles.items():
-        scores = score_question_bubbles(aligned.image, bubbles, config.scoring)
+        scores = score_question_bubbles(aligned.image, bubbles, active_config.scoring)
         bubble_scores[question_id] = scores
         all_scores.extend(scores)
 
-    active_classification = adapt_classification_params(all_scores, config.classification)
+    active_classification = adapt_classification_params(
+        all_scores, active_config.classification
+    )
     answers: dict[str, QuestionResult] = {}
     for question_id, scores in bubble_scores.items():
         answers[question_id] = classify_question(
             int(question_id), scores, active_classification, alignment_status=aligned.status
         )
 
-    effective_config = config.model_copy(deep=True)
+    effective_config = active_config.model_copy(deep=True)
     effective_config.classification = active_classification
     result = AnalysisResult(
         meta=AnalysisMeta(
@@ -150,7 +155,7 @@ def analyze_sheet(
             template,
             bubble_scores,
             answers,
-            config.scoring.dark_pixel_threshold,
+            active_config.scoring.dark_pixel_threshold,
         )
     return result
 

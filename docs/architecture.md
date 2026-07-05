@@ -19,6 +19,7 @@ input image
 ## Main Modules
 
 - `preprocess.py`: image loading, normalization, grayscale conversion, dark-ink masking
+  - includes grayscale contrast enhancement and PDF rasterization support
 - `alignment.py`: corner marker detection and perspective alignment
 - `template_builder.py`: semi-automatic template generation from the reference form
 - `template_io.py`: template persistence and validation

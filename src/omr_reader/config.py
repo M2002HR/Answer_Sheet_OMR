@@ -23,3 +23,15 @@ def load_config(config_path: str | Path | None) -> OMRConfig:
     else:
         data = json.loads(raw_text)
     return OMRConfig.model_validate(data)
+
+
+def apply_overrides(config: OMRConfig, overrides: dict[str, dict[str, Any]]) -> OMRConfig:
+    data = config.model_dump(mode="python")
+    for section, values in overrides.items():
+        if not values:
+            continue
+        data.setdefault(section, {})
+        for key, value in values.items():
+            if value is not None:
+                data[section][key] = value
+    return OMRConfig.model_validate(data)

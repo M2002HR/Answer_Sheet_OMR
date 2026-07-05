@@ -1,4 +1,4 @@
-from omr_reader.config import load_config
+from omr_reader.config import apply_overrides, load_config
 
 
 def test_load_yaml_config(tmp_path) -> None:
@@ -20,3 +20,18 @@ alignment:
     assert config.classification.marked_threshold == 0.25
     assert config.classification.adaptive_thresholds is True
     assert config.alignment.min_confidence == 0.8
+
+
+def test_apply_overrides_updates_thresholds() -> None:
+    config = load_config(None)
+    overridden = apply_overrides(
+        config,
+        {
+            "classification": {"marked_threshold": 0.18},
+            "preprocess": {"clahe_clip_limit": 4.0},
+            "scoring": {"dark_pixel_threshold": 135},
+        },
+    )
+    assert overridden.classification.marked_threshold == 0.18
+    assert overridden.preprocess.clahe_clip_limit == 4.0
+    assert overridden.scoring.dark_pixel_threshold == 135

@@ -8,12 +8,49 @@ from rich.console import Console
 from rich.table import Table
 
 from .analyzer import analyze_sheet, write_analysis_result
+from .config import apply_overrides, load_config
 from .grading import grade_analysis_result, load_answer_key, write_grading_result
 from .template_builder import build_template_from_reference
 from .template_io import save_template
 
 app = typer.Typer(help="OMR answer sheet reader")
 console = Console()
+
+
+def _build_runtime_config(
+    config_path: Path | None,
+    *,
+    marked_threshold: float | None,
+    faint_threshold: float | None,
+    strong_dark_min: float | None,
+    dark_pixel_threshold: int | None,
+    strong_dark_threshold: int | None,
+    clahe_clip_limit: float | None,
+    clahe_tile_grid_size: int | None,
+    sharpen_amount: float | None,
+    pdf_dpi: int | None,
+):
+    base = load_config(config_path)
+    return apply_overrides(
+        base,
+        {
+            "classification": {
+                "marked_threshold": marked_threshold,
+                "faint_threshold": faint_threshold,
+                "strong_dark_min": strong_dark_min,
+            },
+            "scoring": {
+                "dark_pixel_threshold": dark_pixel_threshold,
+                "strong_dark_threshold": strong_dark_threshold,
+            },
+            "preprocess": {
+                "clahe_clip_limit": clahe_clip_limit,
+                "clahe_tile_grid_size": clahe_tile_grid_size,
+                "sharpen_amount": sharpen_amount,
+                "pdf_dpi": pdf_dpi,
+            },
+        },
+    )
 
 
 @app.command("analyze")
@@ -24,8 +61,29 @@ def analyze_command(
     debug_dir: Path | None = typer.Option(None),
     config: Path | None = typer.Option(None, exists=True, readable=True),
     answer_key: Path | None = typer.Option(None, exists=True, readable=True),
+    marked_threshold: float | None = typer.Option(None),
+    faint_threshold: float | None = typer.Option(None),
+    strong_dark_min: float | None = typer.Option(None),
+    dark_pixel_threshold: int | None = typer.Option(None),
+    strong_dark_threshold: int | None = typer.Option(None),
+    clahe_clip_limit: float | None = typer.Option(None),
+    clahe_tile_grid_size: int | None = typer.Option(None),
+    sharpen_amount: float | None = typer.Option(None),
+    pdf_dpi: int | None = typer.Option(None),
 ) -> None:
-    result = analyze_sheet(image, template, config_path=config, debug_dir=debug_dir)
+    runtime_config = _build_runtime_config(
+        config,
+        marked_threshold=marked_threshold,
+        faint_threshold=faint_threshold,
+        strong_dark_min=strong_dark_min,
+        dark_pixel_threshold=dark_pixel_threshold,
+        strong_dark_threshold=strong_dark_threshold,
+        clahe_clip_limit=clahe_clip_limit,
+        clahe_tile_grid_size=clahe_tile_grid_size,
+        sharpen_amount=sharpen_amount,
+        pdf_dpi=pdf_dpi,
+    )
+    result = analyze_sheet(image, template, debug_dir=debug_dir, config=runtime_config)
     write_analysis_result(out, result)
     console.print(f"Wrote analysis to {out}")
     console.print(json.dumps(result.summary, ensure_ascii=False, indent=2))
@@ -45,12 +103,33 @@ def batch_command(
     debug_dir: Path | None = typer.Option(None, help="Optional debug folder name inside each sample folder."),
     config: Path | None = typer.Option(None, exists=True, readable=True),
     answer_key: Path | None = typer.Option(None, exists=True, readable=True),
+    marked_threshold: float | None = typer.Option(None),
+    faint_threshold: float | None = typer.Option(None),
+    strong_dark_min: float | None = typer.Option(None),
+    dark_pixel_threshold: int | None = typer.Option(None),
+    strong_dark_threshold: int | None = typer.Option(None),
+    clahe_clip_limit: float | None = typer.Option(None),
+    clahe_tile_grid_size: int | None = typer.Option(None),
+    sharpen_amount: float | None = typer.Option(None),
+    pdf_dpi: int | None = typer.Option(None),
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
+    runtime_config = _build_runtime_config(
+        config,
+        marked_threshold=marked_threshold,
+        faint_threshold=faint_threshold,
+        strong_dark_min=strong_dark_min,
+        dark_pixel_threshold=dark_pixel_threshold,
+        strong_dark_threshold=strong_dark_threshold,
+        clahe_clip_limit=clahe_clip_limit,
+        clahe_tile_grid_size=clahe_tile_grid_size,
+        sharpen_amount=sharpen_amount,
+        pdf_dpi=pdf_dpi,
+    )
     images = sorted(
         path
         for path in input_dir.iterdir()
-        if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff"}
+        if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff", ".pdf"}
     )
     table = Table(title="Batch OMR")
     table.add_column("Image")
@@ -79,7 +158,7 @@ def batch_command(
         sample_output_dir.mkdir(parents=True, exist_ok=True)
         debug_folder_name = debug_dir.name if debug_dir is not None else "debug"
         per_debug = sample_output_dir / debug_folder_name
-        result = analyze_sheet(image_path, template, config_path=config, debug_dir=per_debug)
+        result = analyze_sheet(image_path, template, debug_dir=per_debug, config=runtime_config)
         analysis_path = sample_output_dir / "analysis.json"
         write_analysis_result(analysis_path, result)
         sample_summary: dict[str, int | float] = dict(result.summary)

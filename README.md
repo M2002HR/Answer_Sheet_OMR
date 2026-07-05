@@ -8,6 +8,9 @@ The project focuses on:
 - deterministic template-based bubble localization
 - mark scoring that avoids counting the cyan/blue bubble outline as a response
 - detection-aware classification for `single`, `blank`, `multiple`, and `uncertain`
+- contrast enhancement for low-contrast scans
+- configurable score thresholds from CLI or config
+- direct PDF support through first-page rasterization
 - optional grading against an answer key
 - debug artifacts for calibration and human review
 - batch processing with one output folder per input sample
@@ -88,6 +91,34 @@ With grading:
 
 If you also have a matching answer key for that exact template, add `--answer-key`.
 
+## Tune Detection Thresholds
+
+If a scan is too faint and valid marks are being classified as blank, you can tune detection directly from the CLI:
+
+```bash
+python -m omr_reader analyze \
+  --image samples/scans/202512061032_Page_01.png \
+  --template templates/answer_sheet_template.json \
+  --marked-threshold 0.18 \
+  --dark-pixel-threshold 130 \
+  --strong-dark-threshold 90 \
+  --clahe-clip-limit 4.0 \
+  --sharpen-amount 0.45 \
+  --out outputs/result.json
+```
+
+Important knobs:
+
+- `--marked-threshold`: the minimum final bubble score required to treat a bubble as marked
+- `--faint-threshold`: the lower band used for erased or faint traces
+- `--dark-pixel-threshold`: threshold for dark-pixel detection in the bubble mask
+- `--strong-dark-threshold`: threshold for strong dark evidence
+- `--clahe-clip-limit`: local contrast enhancement strength
+- `--clahe-tile-grid-size`: local contrast tile size
+- `--sharpen-amount`: post-contrast sharpening strength
+
+The current default preprocessing was updated to improve low-contrast grayscale scans. On `samples/scans/202512061032_Page_01.png`, the default pipeline now detects all `8` questions as `single`.
+
 ## Batch Processing
 
 ```bash
@@ -113,6 +144,24 @@ outputs/batch_results/
 
 The batch root also contains `batch_summary.json`. If an answer key is supplied, each sample folder also contains `grading.json`.
 
+## PDF Input
+
+`analyze` and `batch` also support PDF files.
+
+The current behavior is:
+
+- the first page of the PDF is rasterized with `pdftoppm`
+- the rendered page is then processed by the normal OMR pipeline
+
+Example:
+
+```bash
+python -m omr_reader batch \
+  --input-dir samples/scans3 \
+  --template templates/answer_sheet_template.json \
+  --output-dir outputs/pdf_batch_results
+```
+
 ## Configuration
 
 Default configuration is loaded from code. You can override values with JSON or YAML.
@@ -129,10 +178,16 @@ Example:
   },
   "classification": {
     "faint_threshold": 0.10,
-    "marked_threshold": 0.22,
+    "marked_threshold": 0.20,
     "strong_dark_min": 0.08,
     "uncertain_margin": 0.07,
     "adaptive_thresholds": false
+  },
+  "preprocess": {
+    "clahe_clip_limit": 3.5,
+    "clahe_tile_grid_size": 8,
+    "sharpen_amount": 0.35,
+    "pdf_dpi": 200
   },
   "alignment": {
     "min_confidence": 0.75

@@ -172,7 +172,7 @@ def align_sheet(image: np.ndarray, template: Template, params: AlignmentParams) 
     aligned = cv2.warpPerspective(normalized, homography, (width, height))
     if diagnostics.get("method") == "corner_contours":
         scores = [float(value) for key, value in diagnostics.items() if key.endswith("_score")]
-        confidence = float(min(1.0, max(0.0, np.mean(scores) / 780.0))) if scores else 0.85
+        confidence = float(min(1.0, max(0.0, np.mean(scores) / 760.0))) if scores else 0.85
     else:
         confidence = float(min(1.0, max(0.0, diagnostics.get("marker_darkness_mean", 0.0) + 0.45)))
     status = "ok" if confidence >= params.min_confidence else "low_confidence"

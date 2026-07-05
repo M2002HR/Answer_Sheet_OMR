@@ -95,7 +95,7 @@ class ScoringParams(BaseModel):
 
 class ClassificationParams(BaseModel):
     faint_threshold: float = 0.10
-    marked_threshold: float = 0.22
+    marked_threshold: float = 0.20
     strong_dark_min: float = 0.08
     component_area_min: float = 0.01
     uncertain_margin: float = 0.07
@@ -104,6 +104,15 @@ class ClassificationParams(BaseModel):
     max_marked_threshold: float = 0.32
     min_faint_threshold: float = 0.06
     max_faint_threshold: float = 0.14
+
+
+class PreprocessParams(BaseModel):
+    normalize_illumination: bool = True
+    apply_clahe: bool = True
+    clahe_clip_limit: float = 3.5
+    clahe_tile_grid_size: int = 8
+    sharpen_amount: float = 0.35
+    pdf_dpi: int = 200
 
 
 class AlignmentParams(BaseModel):
@@ -117,6 +126,7 @@ class AlignmentParams(BaseModel):
 
 
 class OMRConfig(BaseModel):
+    preprocess: PreprocessParams = Field(default_factory=PreprocessParams)
     scoring: ScoringParams = Field(default_factory=ScoringParams)
     classification: ClassificationParams = Field(default_factory=ClassificationParams)
     alignment: AlignmentParams = Field(default_factory=AlignmentParams)

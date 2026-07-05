@@ -20,6 +20,14 @@ python -m omr_reader analyze \
 - `--debug-dir`: debug artifact directory
 - `--config`: optional JSON or YAML config override
 - `--answer-key`: optional grading input
+- `--marked-threshold`: override the minimum score required for a marked bubble
+- `--faint-threshold`: override the faint-trace lower band
+- `--dark-pixel-threshold`: override the dark-pixel cutoff
+- `--strong-dark-threshold`: override the strong-dark cutoff
+- `--clahe-clip-limit`: override local contrast enhancement strength
+- `--clahe-tile-grid-size`: override CLAHE tile size
+- `--sharpen-amount`: override post-enhancement sharpening
+- `--pdf-dpi`: override PDF rasterization DPI
 
 ## `build-template`
 
@@ -63,3 +71,5 @@ python -m omr_reader batch \
 - `--debug-dir`: optional custom folder name used inside each sample folder
 - `--config`: optional JSON or YAML config override
 - `--answer-key`: optional grading key for every sample
+- `--marked-threshold`: batch-wide threshold override
+- `--pdf-dpi`: PDF rasterization DPI for PDF inputs
