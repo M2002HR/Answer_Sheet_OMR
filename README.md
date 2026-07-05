@@ -17,7 +17,7 @@ The project focuses on:
 - `analyze`: read one sheet and produce `analysis.json`
 - `build-template`: generate a reusable template from a reference form
 - `batch`: process a whole folder of scans
-- optional grading with `samples/sample_answer_key.json`
+- optional grading with a matching JSON answer key
 - debug outputs:
   - `aligned.png`
   - `ink_mask.png`
@@ -39,29 +39,42 @@ pip install -e .[dev]
 
 ## Build a Template
 
-For the sample form included in the repository:
+For the current grayscale sample form:
 
 ```bash
 python -m omr_reader build-template \
-  --reference samples/scans/sample_sheet.png \
+  --reference samples/scans/202512061032_Page_01.png \
   --out templates/answer_sheet_template.json \
-  --questions 300 \
-  --columns 6 \
+  --questions 60 \
+  --columns 3 \
   --options 4
 ```
 
-The current template is ordered exactly as follows:
+The default ordering is:
 
 - Question `1` starts at the top-left answer column.
 - Numbering continues downward to the bottom of the column.
 - The next question after the bottom of a column starts at the top of the next column to the right.
-- Question `300` is the bottom-right question.
+
+If the form contains more physical slots than active questions, the builder can still generate a valid template. By default it uses the first `N` slots in reading order.
+
+For explicit per-column distribution, use `--column-question-counts`:
+
+```bash
+python -m omr_reader build-template \
+  --reference samples/scans/202512061032_Page_01.png \
+  --out templates/answer_sheet_template_8q.json \
+  --questions 8 \
+  --columns 3 \
+  --options 4 \
+  --column-question-counts 3,3,2
+```
 
 ## Analyze One Sheet
 
 ```bash
 python -m omr_reader analyze \
-  --image samples/scans/sample_sheet.png \
+  --image samples/scans/202512061032_Page_01.png \
   --template templates/answer_sheet_template.json \
   --out outputs/result.json \
   --debug-dir outputs/debug
@@ -70,19 +83,10 @@ python -m omr_reader analyze \
 With grading:
 
 ```bash
-python -m omr_reader analyze \
-  --image samples/scans/sample_sheet.png \
-  --template templates/answer_sheet_template.json \
-  --answer-key samples/sample_answer_key.json \
-  --out outputs/result.json \
-  --debug-dir outputs/debug
-```
-
-This writes:
-
 - `outputs/result.json`
-- `outputs/result.grading.json` when `--answer-key` is provided
 - debug artifacts inside `outputs/debug/`
+
+If you also have a matching answer key for that exact template, add `--answer-key`.
 
 ## Batch Processing
 
@@ -90,7 +94,6 @@ This writes:
 python -m omr_reader batch \
   --input-dir samples/scans \
   --template templates/answer_sheet_template.json \
-  --answer-key samples/sample_answer_key.json \
   --output-dir outputs/batch_results
 ```
 
@@ -98,9 +101,8 @@ For each input image, the batch command creates one output folder named after th
 
 ```text
 outputs/batch_results/
-  sample_sheet/
+  202512061032_Page_01/
     analysis.json
-    grading.json
     debug/
       aligned.png
       ink_mask.png
@@ -109,7 +111,7 @@ outputs/batch_results/
       questions_review.json
 ```
 
-The batch root also contains `batch_summary.json`.
+The batch root also contains `batch_summary.json`. If an answer key is supplied, each sample folder also contains `grading.json`.
 
 ## Configuration
 
@@ -142,7 +144,7 @@ Use it like this:
 
 ```bash
 python -m omr_reader analyze \
-  --image samples/scans/sample_sheet.png \
+  --image samples/scans/202512061032_Page_01.png \
   --template templates/answer_sheet_template.json \
   --config config.yaml \
   --out outputs/result.json
@@ -175,12 +177,13 @@ Detailed documentation is available in [docs/](docs):
 - [docs/json_outputs.md](docs/json_outputs.md)
 - [docs/testing.md](docs/testing.md)
 
-## Current Sample-Sheet Result
+## Notes on Grading
 
-On `samples/scans/sample_sheet.png`, the current detection result is:
+Grading only works when the answer key matches the analyzed template exactly.
 
-- `single = 294`
-- `blank = 6`
-- `multiple = 0`
-- `uncertain = 0`
-- `needs_review = 0`
+For example:
+
+- a `60-question` template requires a `60-question` answer key
+- an `8-question` template requires an `8-question` answer key
+
+The repository still contains `samples/sample_answer_key.json`, which is a `300-question` key and should only be used with a matching `300-question` template

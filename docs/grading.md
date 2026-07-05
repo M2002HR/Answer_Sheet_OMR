@@ -2,14 +2,20 @@
 
 ## Input Format
 
-The current grading workflow accepts a JSON answer key such as `samples/sample_answer_key.json`.
+The grading workflow accepts a JSON answer key whose question set exactly matches the analyzed template.
 
 Supported value formats:
 
 - letters: `"a"`, `"b"`, `"c"`, `"d"`
 - integers: `1`, `2`, `3`, `4`
 
-Question IDs are expected to match the analyzed sheet exactly.
+Question IDs must match the analyzed sheet exactly.
+
+This is especially important when:
+
+- a printed form has physical capacity for more questions than the active exam
+- a custom template is built for only the first `N` slots
+- per-column question counts are used
 
 ## Grading Rules
 

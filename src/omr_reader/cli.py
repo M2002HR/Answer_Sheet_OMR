@@ -131,7 +131,13 @@ def build_template_command(
     template_id: str = typer.Option("answer_sheet_v1"),
     column_order: str = typer.Option("ltr", help="ltr or rtl"),
     option_order: str = typer.Option("ltr", help="ltr or rtl"),
+    column_question_counts: str | None = typer.Option(
+        None, help="Optional comma-separated question counts per column, e.g. 3,3,2"
+    ),
 ) -> None:
+    parsed_column_question_counts = None
+    if column_question_counts:
+        parsed_column_question_counts = [int(value.strip()) for value in column_question_counts.split(",") if value.strip()]
     template = build_template_from_reference(
         reference,
         questions,
@@ -140,6 +146,7 @@ def build_template_command(
         template_id=template_id,
         column_order=column_order,
         option_order=option_order,
+        column_question_counts=parsed_column_question_counts,
     )
     save_template(out, template)
     console.print(f"Wrote template to {out}")

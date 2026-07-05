@@ -8,8 +8,10 @@ The current automated tests cover:
 - synthetic scoring behavior
 - template schema validation
 - smoke analysis
-- corner-marker detection on the sample sheet
-- template ordering on the sample sheet
+- corner-marker detection on the grayscale sample sheet
+- template ordering on the grayscale sample sheet
+- partial-capacity template generation, such as `8 questions / 3 columns`
+- explicit per-column template distribution
 - grading logic
 - YAML config loading
 
@@ -34,4 +36,5 @@ pytest -q tests/test_alignment_and_builder.py tests/test_grading.py
 - faint traces do not become selected answers
 - multiple marks are reported correctly
 - failed alignment downgrades results safely
-- sample-sheet question ordering matches the required top-left to bottom-right progression
+- grayscale sample ordering matches the required top-left to bottom-right progression
+- a form with more physical slots than active questions can still produce a valid template

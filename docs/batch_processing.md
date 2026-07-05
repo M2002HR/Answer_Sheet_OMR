@@ -16,9 +16,8 @@ For each sample:
 ```text
 output_dir/
   batch_summary.json
-  sample_sheet/
+  202512061032_Page_01/
     analysis.json
-    grading.json
     debug/
       aligned.png
       ink_mask.png
@@ -26,6 +25,8 @@ output_dir/
       bubbles_scores.csv
       questions_review.json
 ```
+
+If grading is enabled, `grading.json` is also written inside each sample folder.
 
 ## Batch Summary
 
