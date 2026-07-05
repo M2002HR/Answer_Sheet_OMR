@@ -95,12 +95,15 @@ class ScoringParams(BaseModel):
 
 class ClassificationParams(BaseModel):
     faint_threshold: float = 0.10
-    marked_threshold: float = 0.20
-    strong_dark_min: float = 0.08
+    marked_threshold: float = 0.13
+    strong_dark_min: float = 0.03
     component_area_min: float = 0.01
+    marked_mean_darkness_min: float = 0.35
+    marked_ink_ratio_min: float = 0.035
     uncertain_margin: float = 0.07
+    allow_multiple_marks: bool = False
     adaptive_thresholds: bool = False
-    min_marked_threshold: float = 0.18
+    min_marked_threshold: float = 0.13
     max_marked_threshold: float = 0.32
     min_faint_threshold: float = 0.06
     max_faint_threshold: float = 0.14

@@ -22,6 +22,8 @@ python -m omr_reader analyze \
 - `--answer-key`: optional grading input
 - `--marked-threshold`: override the minimum score required for a marked bubble
 - `--faint-threshold`: override the faint-trace lower band
+- `--allow-multiple-marks`: preserve true multi-mark detections
+- `--single-mark-only`: collapse multi-mark candidates to the highest-scoring option
 - `--dark-pixel-threshold`: override the dark-pixel cutoff
 - `--strong-dark-threshold`: override the strong-dark cutoff
 - `--clahe-clip-limit`: override local contrast enhancement strength
@@ -37,9 +39,10 @@ Generate a reusable template from the reference sheet.
 python -m omr_reader build-template \
   --reference samples/scans/202512061032_Page_01.png \
   --out templates/answer_sheet_template.json \
-  --questions 60 \
+  --questions 8 \
   --columns 3 \
-  --options 4
+  --options 4 \
+  --column-question-counts 3,3,2
 ```
 
 ### Important options
@@ -72,4 +75,6 @@ python -m omr_reader batch \
 - `--config`: optional JSON or YAML config override
 - `--answer-key`: optional grading key for every sample
 - `--marked-threshold`: batch-wide threshold override
+- `--allow-multiple-marks`: preserve true multi-mark detections
+- `--single-mark-only`: collapse multi-mark candidates to the highest-scoring option
 - `--pdf-dpi`: PDF rasterization DPI for PDF inputs

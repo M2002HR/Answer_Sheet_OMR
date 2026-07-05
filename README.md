@@ -48,9 +48,10 @@ For the current grayscale sample form:
 python -m omr_reader build-template \
   --reference samples/scans/202512061032_Page_01.png \
   --out templates/answer_sheet_template.json \
-  --questions 60 \
+  --questions 8 \
   --columns 3 \
-  --options 4
+  --options 4 \
+  --column-question-counts 3,3,2
 ```
 
 The default ordering is:
@@ -59,19 +60,7 @@ The default ordering is:
 - Numbering continues downward to the bottom of the column.
 - The next question after the bottom of a column starts at the top of the next column to the right.
 
-If the form contains more physical slots than active questions, the builder can still generate a valid template. By default it uses the first `N` slots in reading order.
-
-For explicit per-column distribution, use `--column-question-counts`:
-
-```bash
-python -m omr_reader build-template \
-  --reference samples/scans/202512061032_Page_01.png \
-  --out templates/answer_sheet_template_8q.json \
-  --questions 8 \
-  --columns 3 \
-  --options 4 \
-  --column-question-counts 3,3,2
-```
+If the form contains more physical slots than active questions, the builder can still generate a valid template. By default it uses the first `N` slots in reading order. For explicit per-column distribution, use `--column-question-counts`.
 
 ## Analyze One Sheet
 
@@ -83,9 +72,8 @@ python -m omr_reader analyze \
   --debug-dir outputs/debug
 ```
 
-With grading:
+This writes:
 
-```bash
 - `outputs/result.json`
 - debug artifacts inside `outputs/debug/`
 
@@ -99,7 +87,7 @@ If a scan is too faint and valid marks are being classified as blank, you can tu
 python -m omr_reader analyze \
   --image samples/scans/202512061032_Page_01.png \
   --template templates/answer_sheet_template.json \
-  --marked-threshold 0.18 \
+  --marked-threshold 0.13 \
   --dark-pixel-threshold 130 \
   --strong-dark-threshold 90 \
   --clahe-clip-limit 4.0 \
@@ -116,8 +104,11 @@ Important knobs:
 - `--clahe-clip-limit`: local contrast enhancement strength
 - `--clahe-tile-grid-size`: local contrast tile size
 - `--sharpen-amount`: post-contrast sharpening strength
+- `--allow-multiple-marks`: preserve true multi-mark detections instead of collapsing them to the highest score
 
 The current default preprocessing was updated to improve low-contrast grayscale scans. On `samples/scans/202512061032_Page_01.png`, the default pipeline now detects all `8` questions as `single`.
+
+By default, if more than one option crosses the marked threshold, the reader keeps only the top-scoring option and adds a `multiple_candidates_collapsed` warning. Pass `--allow-multiple-marks` when you want those cases reported as `multiple`.
 
 ## Batch Processing
 
@@ -178,8 +169,9 @@ Example:
   },
   "classification": {
     "faint_threshold": 0.10,
-    "marked_threshold": 0.20,
-    "strong_dark_min": 0.08,
+    "marked_threshold": 0.13,
+    "strong_dark_min": 0.03,
+    "allow_multiple_marks": false,
     "uncertain_margin": 0.07,
     "adaptive_thresholds": false
   },
@@ -206,6 +198,8 @@ python -m omr_reader analyze \
 ```
 
 ## Output Files
+
+Generated files under `outputs/` are intentionally ignored by git. Only `outputs/.gitkeep` is tracked.
 
 ### Analysis JSON
 

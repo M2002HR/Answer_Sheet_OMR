@@ -10,11 +10,19 @@ from .models import (
 )
 
 
-def bubble_state(score: BubbleScore, params: ClassificationParams) -> str:
-    if score.score >= params.marked_threshold and (
+def _has_mark_evidence(score: BubbleScore, params: ClassificationParams) -> bool:
+    return (
         score.strong_dark_ratio >= params.strong_dark_min
         or (score.component_area_ratio or 0.0) >= params.component_area_min
-    ):
+        or (
+            score.mean_darkness >= params.marked_mean_darkness_min
+            and score.ink_ratio >= params.marked_ink_ratio_min
+        )
+    )
+
+
+def bubble_state(score: BubbleScore, params: ClassificationParams) -> str:
+    if score.score >= params.marked_threshold and _has_mark_evidence(score, params):
         return "candidate_marked"
     if score.score >= params.faint_threshold:
         return "faint_trace_or_erased"
@@ -23,6 +31,24 @@ def bubble_state(score: BubbleScore, params: ClassificationParams) -> str:
 
 def _clamp(value: float) -> float:
     return max(0.0, min(1.0, value))
+
+
+def _is_ambiguous_runner_up(score: BubbleScore, params: ClassificationParams) -> bool:
+    near_mark_band = score.score >= max(
+        params.faint_threshold,
+        params.marked_threshold - params.uncertain_margin * 0.25,
+    )
+    if not near_mark_band:
+        return False
+
+    return (
+        score.strong_dark_ratio >= params.strong_dark_min * 0.75
+        or (score.component_area_ratio or 0.0) >= params.component_area_min * 0.75
+        or (
+            score.mean_darkness >= params.marked_mean_darkness_min
+            and score.ink_ratio >= params.marked_ink_ratio_min * 0.75
+        )
+    )
 
 
 def classify_question(
@@ -70,9 +96,14 @@ def classify_question(
 
     if len(marked) == 1:
         top = marked[0]
-        second = sorted_scores[1].score if len(sorted_scores) > 1 else 0.0
+        runner_up = sorted_scores[1] if len(sorted_scores) > 1 else None
+        second = runner_up.score if runner_up is not None else 0.0
         margin = top.score - second
-        if margin < params.uncertain_margin:
+        if (
+            runner_up is not None
+            and margin < params.uncertain_margin
+            and _is_ambiguous_runner_up(runner_up, params)
+        ):
             warnings.append("low_margin")
             return QuestionResult(
                 status="uncertain",
@@ -84,6 +115,19 @@ def classify_question(
             )
         threshold_gain = top.score - params.marked_threshold
         confidence = _clamp(0.55 + 0.8 * margin + threshold_gain)
+        return QuestionResult(
+            status="single",
+            selected=[top.option],
+            confidence=confidence,
+            warnings=warnings,
+            scores={str(score.option): round(score.score, 4) for score in sorted(scores, key=lambda item: item.option)},
+            bubble_evidence={str(score.option): score.evidence() for score in sorted(scores, key=lambda item: item.option)},
+        )
+
+    if not params.allow_multiple_marks:
+        top = marked[0]
+        warnings.append("multiple_candidates_collapsed")
+        confidence = _clamp(top.score)
         return QuestionResult(
             status="single",
             selected=[top.option],

@@ -54,16 +54,63 @@ def test_multiple_marks_classification() -> None:
         [score(1, 0.70), score(2, 0.03), score(3, 0.68), score(4, 0.02)],
         params,
     )
+    assert result.status == "single"
+    assert result.selected == [1]
+    assert "multiple_candidates_collapsed" in result.warnings
+
+
+def test_multiple_marks_classification_when_enabled() -> None:
+    params = ClassificationParams(allow_multiple_marks=True)
+    result = classify_question(
+        3,
+        [score(1, 0.70), score(2, 0.03), score(3, 0.68), score(4, 0.02)],
+        params,
+    )
     assert result.status == "multiple"
     assert result.selected == [1, 3]
     assert "multiple_marks" in result.warnings
+
+
+def test_faint_but_filled_mark_is_detected() -> None:
+    params = ClassificationParams()
+    result = classify_question(
+        6,
+        [
+            BubbleScore(
+                option=1,
+                score=0.145,
+                ink_ratio=0.041,
+                mean_darkness=0.42,
+                strong_dark_ratio=0.0,
+                component_area_ratio=0.0,
+            ),
+            score(2, 0.08, 0.02),
+            score(3, 0.03, 0.0),
+            score(4, 0.02, 0.0),
+        ],
+        params,
+    )
+    assert result.status == "single"
+    assert result.selected == [1]
 
 
 def test_low_margin_goes_uncertain() -> None:
     params = ClassificationParams()
     result = classify_question(
         4,
-        [score(1, 0.23), score(2, 0.19), score(3, 0.03, 0.01), score(4, 0.02, 0.01)],
+        [
+            score(1, 0.17),
+            BubbleScore(
+                option=2,
+                score=0.12,
+                ink_ratio=0.12,
+                mean_darkness=0.22,
+                strong_dark_ratio=0.025,
+                component_area_ratio=0.0,
+            ),
+            score(3, 0.03, 0.01),
+            score(4, 0.02, 0.01),
+        ],
         params,
     )
     assert result.status == "uncertain"
