@@ -1,0 +1,80 @@
+{
+  "5": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.9597675075275557,
+    "warnings": [],
+    "scores": {
+      "1": 0.0656,
+      "2": 0.0793,
+      "3": 0.0053,
+      "4": 0.0108
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.0380952380952381,
+        "mean_darkness": 0.14565825462341309,
+        "strong_dark_ratio": 0.01904761904761905,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.0761904761904762,
+        "mean_darkness": 0.11835667490959167,
+        "strong_dark_ratio": 0.0380952380952381,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.01751634106040001,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.03585434332489967,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      }
+    }
+  },
+  "7": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.8921568606155259,
+    "warnings": [
+      "faint_trace_or_erased"
+    ],
+    "scores": {
+      "1": 0.0227,
+      "2": 0.0303,
+      "3": 0.1078,
+      "4": 0.0504
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.01904761904761905,
+        "mean_darkness": 0.04717087000608444,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.10099595785140991,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.10476190476190476,
+        "mean_darkness": 0.13090570271015167,
+        "strong_dark_ratio": 0.08571428571428572,
+        "component_area_ratio": 0.047619047619047616
+      },
+      "4": {
+        "ink_ratio": 0.0380952380952381,
+        "mean_darkness": 0.09501400589942932,
+        "strong_dark_ratio": 0.01904761904761905,
+        "component_area_ratio": 0.0380952380952381
+      }
+    }
+  }
+}

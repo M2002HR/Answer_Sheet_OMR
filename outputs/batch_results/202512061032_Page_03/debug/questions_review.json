@@ -1,0 +1,82 @@
+{
+  "6": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.8987506927195049,
+    "warnings": [
+      "faint_trace_or_erased"
+    ],
+    "scores": {
+      "1": 0.0328,
+      "2": 0.0951,
+      "3": 0.0856,
+      "4": 0.1012
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.10946779698133469,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.0873015873015873,
+        "mean_darkness": 0.18602553009986877,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.031746031746031744
+      },
+      "3": {
+        "ink_ratio": 0.05714285714285714,
+        "mean_darkness": 0.16773109138011932,
+        "strong_dark_ratio": 0.0380952380952381,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.08571428571428572,
+        "mean_darkness": 0.1771802306175232,
+        "strong_dark_ratio": 0.0380952380952381,
+        "component_area_ratio": 0.0
+      }
+    }
+  },
+  "7": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.8999019509979657,
+    "warnings": [
+      "faint_trace_or_erased"
+    ],
+    "scores": {
+      "1": 0.0471,
+      "2": 0.1001,
+      "3": 0.0654,
+      "4": 0.0977
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.01904761904761905,
+        "mean_darkness": 0.12859012186527252,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.0873015873015873,
+        "mean_darkness": 0.20270778238773346,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.03968253968253968
+      },
+      "3": {
+        "ink_ratio": 0.0380952380952381,
+        "mean_darkness": 0.16078433394432068,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0380952380952381
+      },
+      "4": {
+        "ink_ratio": 0.09523809523809523,
+        "mean_darkness": 0.15103641152381897,
+        "strong_dark_ratio": 0.0380952380952381,
+        "component_area_ratio": 0.047619047619047616
+      }
+    }
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "1": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.9561473949679307,
+    "warnings": [],
+    "scores": {
+      "1": 0.0771,
+      "2": 0.0172,
+      "3": 0.0612,
+      "4": 0.02
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.05714285714285714,
+        "mean_darkness": 0.13938374817371368,
+        "strong_dark_ratio": 0.0380952380952381,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.05719751864671707,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.0380952380952381,
+        "mean_darkness": 0.1308683454990387,
+        "strong_dark_ratio": 0.01904761904761905,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.0667755976319313,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      }
+    }
+  },
+  "2": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.9604302382531266,
+    "warnings": [],
+    "scores": {
+      "1": 0.0169,
+      "2": 0.0324,
+      "3": 0.0967,
+      "4": 0.0122
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.056427016854286194,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.10804855823516846,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.0761904761904762,
+        "mean_darkness": 0.1446872055530548,
+        "strong_dark_ratio": 0.0761904761904762,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.04065626487135887,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      }
+    }
+  },
+  "3": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.9789228919893503,
+    "warnings": [],
+    "scores": {
+      "1": 0.0235,
+      "2": 0.0207,
+      "3": 0.0195,
+      "4": 0.0206
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.07823529839515686,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.06886657327413559,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.06513538956642151,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.06879084557294846,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      }
+    }
+  },
+  "4": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.9553209602886013,
+    "warnings": [],
+    "scores": {
+      "1": 0.0229,
+      "2": 0.0793,
+      "3": 0.0369,
+      "4": 0.0396
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.07630252838134766,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.06666666666666667,
+        "mean_darkness": 0.1642577052116394,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.12307189404964447,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.015873015873015872,
+        "mean_darkness": 0.10827887803316116,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      }
+    }
+  },
+  "5": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.9573078226227136,
+    "warnings": [],
+    "scores": {
+      "1": 0.0904,
+      "2": 0.0293,
+      "3": 0.0205,
+      "4": 0.0306
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.08571428571428572,
+        "mean_darkness": 0.13318394124507904,
+        "strong_dark_ratio": 0.047619047619047616,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.09774042665958405,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.06816994398832321,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.1018807515501976,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      }
+    }
+  }
+}

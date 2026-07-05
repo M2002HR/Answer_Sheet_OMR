@@ -1,0 +1,156 @@
+{
+  "3": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.9670476248780532,
+    "warnings": [],
+    "scores": {
+      "1": 0.0184,
+      "2": 0.0267,
+      "3": 0.0456,
+      "4": 0.0411
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.0613725520670414,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.08904830366373062,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.009523809523809525,
+        "mean_darkness": 0.1377030909061432,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.013888888888888888,
+        "mean_darkness": 0.11612200736999512,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      }
+    }
+  },
+  "4": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.895540611303988,
+    "warnings": [
+      "faint_trace_or_erased"
+    ],
+    "scores": {
+      "1": 0.1045,
+      "2": 0.0635,
+      "3": 0.0207,
+      "4": 0.0977
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.09523809523809523,
+        "mean_darkness": 0.17359478771686554,
+        "strong_dark_ratio": 0.0380952380952381,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.02857142857142857,
+        "mean_darkness": 0.1607842892408371,
+        "strong_dark_ratio": 0.009523809523809525,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.06888889521360397,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.07936507936507936,
+        "mean_darkness": 0.1736694872379303,
+        "strong_dark_ratio": 0.03968253968253968,
+        "component_area_ratio": 0.06349206349206349
+      }
+    }
+  },
+  "5": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.9623368323257282,
+    "warnings": [],
+    "scores": {
+      "1": 0.0536,
+      "2": 0.0587,
+      "3": 0.0129,
+      "4": 0.0254
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.0380952380952381,
+        "mean_darkness": 0.11361345648765564,
+        "strong_dark_ratio": 0.009523809523809525,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.02857142857142857,
+        "mean_darkness": 0.14502336084842682,
+        "strong_dark_ratio": 0.009523809523809525,
+        "component_area_ratio": 0.0
+      },
+      "3": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.04307190328836441,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.08459383249282837,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      }
+    }
+  },
+  "7": {
+    "status": "blank",
+    "selected": [],
+    "confidence": 0.9396661968677054,
+    "warnings": [],
+    "scores": {
+      "1": 0.0313,
+      "2": 0.0663,
+      "3": 0.0823,
+      "4": 0.0614
+    },
+    "bubble_evidence": {
+      "1": {
+        "ink_ratio": 0.0,
+        "mean_darkness": 0.1042763814330101,
+        "strong_dark_ratio": 0.0,
+        "component_area_ratio": 0.0
+      },
+      "2": {
+        "ink_ratio": 0.03968253968253968,
+        "mean_darkness": 0.15502646565437317,
+        "strong_dark_ratio": 0.007936507936507936,
+        "component_area_ratio": 0.031746031746031744
+      },
+      "3": {
+        "ink_ratio": 0.06666666666666667,
+        "mean_darkness": 0.1585434377193451,
+        "strong_dark_ratio": 0.01904761904761905,
+        "component_area_ratio": 0.0
+      },
+      "4": {
+        "ink_ratio": 0.0380952380952381,
+        "mean_darkness": 0.1315779685974121,
+        "strong_dark_ratio": 0.01904761904761905,
+        "component_area_ratio": 0.0
+      }
+    }
+  }
+}
