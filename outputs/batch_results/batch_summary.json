@@ -1,0 +1,29 @@
+{
+  "files": {
+    "sample_sheet.png": {
+      "single": 294,
+      "blank": 6,
+      "multiple": 0,
+      "uncertain": 0,
+      "needs_review": 0,
+      "correct": 294,
+      "wrong": 0,
+      "graded_blank": 6,
+      "graded_multiple": 0,
+      "graded_uncertain": 0,
+      "accuracy": 0.98
+    }
+  },
+  "totals": {
+    "single": 294,
+    "blank": 6,
+    "multiple": 0,
+    "uncertain": 0,
+    "needs_review": 0,
+    "correct": 294,
+    "wrong": 0,
+    "graded_blank": 6,
+    "graded_multiple": 0,
+    "graded_uncertain": 0
+  }
+}

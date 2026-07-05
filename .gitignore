@@ -9,3 +9,5 @@ dist/
 *.egg-info/
 outputs/*
 !outputs/.gitkeep
+!outputs/batch_results/
+!outputs/batch_results/**

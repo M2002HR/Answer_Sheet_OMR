@@ -16,7 +16,7 @@ For each sample:
 ```text
 output_dir/
   batch_summary.json
-  sample_name/
+  sample_sheet/
     analysis.json
     grading.json
     debug/
