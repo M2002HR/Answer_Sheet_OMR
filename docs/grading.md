@@ -2,7 +2,7 @@
 
 ## Input Format
 
-The current grading workflow accepts `answer_key.json`.
+The current grading workflow accepts a JSON answer key such as `samples/sample_answer_key.json`.
 
 Supported value formats:
 

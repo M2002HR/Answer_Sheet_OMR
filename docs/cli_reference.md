@@ -6,11 +6,11 @@ Analyze one image and write detection output.
 
 ```bash
 python -m omr_reader analyze \
-  --image assets/sample_sheet.png \
+  --image samples/scans/sample_sheet.png \
   --template templates/answer_sheet_template.json \
   --out outputs/result.json \
   --debug-dir outputs/debug \
-  --answer-key assets/answer_key.json
+  --answer-key samples/sample_answer_key.json
 ```
 
 ### Important options
@@ -28,7 +28,7 @@ Generate a reusable template from the reference sheet.
 
 ```bash
 python -m omr_reader build-template \
-  --reference assets/sample_sheet.png \
+  --reference samples/scans/sample_sheet.png \
   --out templates/answer_sheet_template.json \
   --questions 300 \
   --columns 6 \
@@ -50,9 +50,9 @@ Process every supported image in a directory.
 
 ```bash
 python -m omr_reader batch \
-  --input-dir scans/ \
+  --input-dir samples/scans \
   --template templates/answer_sheet_template.json \
-  --answer-key assets/answer_key.json \
+  --answer-key samples/sample_answer_key.json \
   --output-dir outputs/batch_results
 ```
 

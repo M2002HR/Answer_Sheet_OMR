@@ -27,7 +27,7 @@ def test_analyzer_smoke_with_identity_alignment(tmp_path) -> None:
     )
     template_path = tmp_path / "smoke_template.json"
     save_template(template_path, template)
-    result = analyze_sheet("assets/sample_sheet.png", template_path)
+    result = analyze_sheet("samples/scans/sample_sheet.png", template_path)
     assert result.meta.question_count == 2
     assert len(result.answers) == 2
     for answer in result.answers.values():

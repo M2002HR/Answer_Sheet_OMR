@@ -17,7 +17,7 @@ The project focuses on:
 - `analyze`: read one sheet and produce `analysis.json`
 - `build-template`: generate a reusable template from a reference form
 - `batch`: process a whole folder of scans
-- optional grading with `answer_key.json`
+- optional grading with `samples/sample_answer_key.json`
 - debug outputs:
   - `aligned.png`
   - `ink_mask.png`
@@ -43,7 +43,7 @@ For the sample form included in the repository:
 
 ```bash
 python -m omr_reader build-template \
-  --reference assets/sample_sheet.png \
+  --reference samples/scans/sample_sheet.png \
   --out templates/answer_sheet_template.json \
   --questions 300 \
   --columns 6 \
@@ -61,7 +61,7 @@ The current template is ordered exactly as follows:
 
 ```bash
 python -m omr_reader analyze \
-  --image assets/sample_sheet.png \
+  --image samples/scans/sample_sheet.png \
   --template templates/answer_sheet_template.json \
   --out outputs/result.json \
   --debug-dir outputs/debug
@@ -71,9 +71,9 @@ With grading:
 
 ```bash
 python -m omr_reader analyze \
-  --image assets/sample_sheet.png \
+  --image samples/scans/sample_sheet.png \
   --template templates/answer_sheet_template.json \
-  --answer-key assets/answer_key.json \
+  --answer-key samples/sample_answer_key.json \
   --out outputs/result.json \
   --debug-dir outputs/debug
 ```
@@ -88,18 +88,17 @@ This writes:
 
 ```bash
 python -m omr_reader batch \
-  --input-dir scans/ \
+  --input-dir samples/scans \
   --template templates/answer_sheet_template.json \
-  --answer-key assets/answer_key.json \
-  --output-dir outputs/batch_results \
-  --debug-dir outputs/batch_debug
+  --answer-key samples/sample_answer_key.json \
+  --output-dir outputs/batch_results
 ```
 
 For each input image, the batch command creates one output folder named after the sample file stem:
 
 ```text
 outputs/batch_results/
-  sample_001/
+  sample_sheet/
     analysis.json
     grading.json
     debug/
@@ -143,7 +142,7 @@ Use it like this:
 
 ```bash
 python -m omr_reader analyze \
-  --image assets/sample_sheet.png \
+  --image samples/scans/sample_sheet.png \
   --template templates/answer_sheet_template.json \
   --config config.yaml \
   --out outputs/result.json
@@ -178,7 +177,7 @@ Detailed documentation is available in [docs/](docs):
 
 ## Current Sample-Sheet Result
 
-On `assets/sample_sheet.png`, the current detection result is:
+On `samples/scans/sample_sheet.png`, the current detection result is:
 
 - `single = 294`
 - `blank = 6`
