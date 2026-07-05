@@ -49,11 +49,16 @@ def batch_command(
     table.add_column("Blank")
     table.add_column("Multiple")
     table.add_column("Uncertain")
+    aggregate = {"single": 0, "blank": 0, "multiple": 0, "uncertain": 0, "needs_review": 0}
+    files: dict[str, dict[str, int]] = {}
 
     for image_path in images:
         per_debug = debug_dir / image_path.stem if debug_dir else None
         result = analyze_sheet(image_path, template, config_path=config, debug_dir=per_debug)
         write_analysis_result(output_dir / f"{image_path.stem}.json", result)
+        files[image_path.name] = result.summary
+        for key in aggregate:
+            aggregate[key] += result.summary[key]
         table.add_row(
             image_path.name,
             str(result.summary["single"]),
@@ -61,6 +66,10 @@ def batch_command(
             str(result.summary["multiple"]),
             str(result.summary["uncertain"]),
         )
+    (output_dir / "batch_summary.json").write_text(
+        json.dumps({"files": files, "totals": aggregate}, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
     console.print(table)
 
 

@@ -104,6 +104,8 @@ python -m omr_reader analyze \
 - `bubbles_scores.csv`
 - `questions_review.json`
 
+در حالت `batch` علاوه بر JSON هر تصویر، فایل `batch_summary.json` هم در `output-dir` ساخته می‌شود.
+
 ## وضعیت فعلی فرم نمونه
 
 روی `assets/sample_sheet.png` خروجی فعلی سیستم:
