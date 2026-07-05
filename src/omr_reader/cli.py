@@ -8,8 +8,9 @@ from rich.console import Console
 from rich.table import Table
 
 from .analyzer import analyze_sheet, write_analysis_result
+from .grading import grade_analysis_result, load_answer_key, write_grading_result
 from .template_builder import build_template_from_reference
-from .template_io import load_template, save_template
+from .template_io import save_template
 
 app = typer.Typer(help="OMR answer sheet reader")
 console = Console()
@@ -22,11 +23,18 @@ def analyze_command(
     out: Path = typer.Option(...),
     debug_dir: Path | None = typer.Option(None),
     config: Path | None = typer.Option(None, exists=True, readable=True),
+    answer_key: Path | None = typer.Option(None, exists=True, readable=True),
 ) -> None:
     result = analyze_sheet(image, template, config_path=config, debug_dir=debug_dir)
     write_analysis_result(out, result)
     console.print(f"Wrote analysis to {out}")
     console.print(json.dumps(result.summary, ensure_ascii=False, indent=2))
+    if answer_key is not None:
+        grading = grade_analysis_result(result, load_answer_key(answer_key), answer_key)
+        grading_out = out.with_name(f"{out.stem}.grading.json")
+        write_grading_result(grading_out, grading)
+        console.print(f"Wrote grading to {grading_out}")
+        console.print(json.dumps(grading.summary.model_dump(mode='json'), ensure_ascii=False, indent=2))
 
 
 @app.command("batch")
@@ -34,8 +42,9 @@ def batch_command(
     input_dir: Path = typer.Option(..., exists=True, file_okay=False, readable=True),
     template: Path = typer.Option(..., exists=True, readable=True),
     output_dir: Path = typer.Option(...),
-    debug_dir: Path | None = typer.Option(None),
+    debug_dir: Path | None = typer.Option(None, help="Optional debug folder name inside each sample folder."),
     config: Path | None = typer.Option(None, exists=True, readable=True),
+    answer_key: Path | None = typer.Option(None, exists=True, readable=True),
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     images = sorted(
@@ -49,23 +58,62 @@ def batch_command(
     table.add_column("Blank")
     table.add_column("Multiple")
     table.add_column("Uncertain")
-    aggregate = {"single": 0, "blank": 0, "multiple": 0, "uncertain": 0, "needs_review": 0}
-    files: dict[str, dict[str, int]] = {}
+    table.add_column("Correct")
+    aggregate = {
+        "single": 0,
+        "blank": 0,
+        "multiple": 0,
+        "uncertain": 0,
+        "needs_review": 0,
+        "correct": 0,
+        "wrong": 0,
+        "graded_blank": 0,
+        "graded_multiple": 0,
+        "graded_uncertain": 0,
+    }
+    files: dict[str, dict[str, int | float]] = {}
+    loaded_answer_key = load_answer_key(answer_key) if answer_key else None
 
     for image_path in images:
-        per_debug = debug_dir / image_path.stem if debug_dir else None
+        sample_output_dir = output_dir / image_path.stem
+        sample_output_dir.mkdir(parents=True, exist_ok=True)
+        debug_folder_name = debug_dir.name if debug_dir is not None else "debug"
+        per_debug = sample_output_dir / debug_folder_name
         result = analyze_sheet(image_path, template, config_path=config, debug_dir=per_debug)
-        write_analysis_result(output_dir / f"{image_path.stem}.json", result)
-        files[image_path.name] = result.summary
-        for key in aggregate:
+        analysis_path = sample_output_dir / "analysis.json"
+        write_analysis_result(analysis_path, result)
+        sample_summary: dict[str, int | float] = dict(result.summary)
+        for key in ["single", "blank", "multiple", "uncertain", "needs_review"]:
             aggregate[key] += result.summary[key]
+        grading_correct = "-"
+        if loaded_answer_key is not None:
+            grading = grade_analysis_result(result, loaded_answer_key, answer_key)
+            write_grading_result(sample_output_dir / "grading.json", grading)
+            grading_correct = str(grading.summary.correct)
+            sample_summary.update(
+                {
+                    "correct": grading.summary.correct,
+                    "wrong": grading.summary.wrong,
+                    "graded_blank": grading.summary.blank,
+                    "graded_multiple": grading.summary.multiple,
+                    "graded_uncertain": grading.summary.uncertain,
+                    "accuracy": grading.summary.accuracy,
+                }
+            )
+            aggregate["correct"] += grading.summary.correct
+            aggregate["wrong"] += grading.summary.wrong
+            aggregate["graded_blank"] += grading.summary.blank
+            aggregate["graded_multiple"] += grading.summary.multiple
+            aggregate["graded_uncertain"] += grading.summary.uncertain
         table.add_row(
             image_path.name,
             str(result.summary["single"]),
             str(result.summary["blank"]),
             str(result.summary["multiple"]),
             str(result.summary["uncertain"]),
+            grading_correct,
         )
+        files[image_path.name] = sample_summary
     (output_dir / "batch_summary.json").write_text(
         json.dumps({"files": files, "totals": aggregate}, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -81,7 +129,7 @@ def build_template_command(
     columns: int = typer.Option(..., min=1),
     options: int = typer.Option(..., min=2),
     template_id: str = typer.Option("answer_sheet_v1"),
-    column_order: str = typer.Option("rtl", help="rtl or ltr"),
+    column_order: str = typer.Option("ltr", help="ltr or rtl"),
     option_order: str = typer.Option("ltr", help="ltr or rtl"),
 ) -> None:
     template = build_template_from_reference(

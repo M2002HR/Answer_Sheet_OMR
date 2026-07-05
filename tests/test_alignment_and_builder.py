@@ -23,4 +23,8 @@ def test_build_template_on_sample() -> None:
     assert template.question_count == 300
     assert template.option_count == 4
     assert len(template.bubbles) == 300
-    assert template.bubbles["1"][0].cx > template.bubbles["300"][0].cx
+    assert template.bubbles["1"][0].cx < template.bubbles["300"][0].cx
+    assert template.bubbles["1"][0].cy < template.bubbles["50"][0].cy
+    assert template.bubbles["50"][0].cx == template.bubbles["1"][0].cx
+    assert template.bubbles["51"][0].cx > template.bubbles["50"][0].cx
+    assert template.bubbles["300"][0].cy > template.bubbles["251"][0].cy

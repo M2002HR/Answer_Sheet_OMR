@@ -84,7 +84,7 @@ def build_template_from_reference(
     options: int,
     *,
     template_id: str = "answer_sheet_v1",
-    column_order: str = "rtl",
+    column_order: str = "ltr",
     option_order: str = "ltr",
 ) -> Template:
     if questions % columns != 0:

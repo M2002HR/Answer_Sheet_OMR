@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, model_validator
 
 QuestionStatus = Literal["single", "blank", "multiple", "uncertain"]
 AlignmentStatus = Literal["ok", "low_confidence", "failed"]
+GradeStatus = Literal["correct", "wrong", "blank", "multiple", "uncertain"]
 
 
 class ReferenceSize(BaseModel):
@@ -178,6 +179,37 @@ class AnalysisResult(BaseModel):
     meta: AnalysisMeta
     answers: dict[str, QuestionResult]
     summary: dict[str, int]
+
+
+class AnswerKey(BaseModel):
+    answers: dict[str, int]
+
+
+class GradedQuestionResult(BaseModel):
+    question_id: int
+    expected: int | None
+    detected_status: QuestionStatus
+    detected_selected: list[int] = Field(default_factory=list)
+    grading_status: GradeStatus
+    is_correct: bool = False
+    warnings: list[str] = Field(default_factory=list)
+
+
+class GradingSummary(BaseModel):
+    total_questions: int
+    answered: int
+    correct: int
+    wrong: int
+    blank: int
+    multiple: int
+    uncertain: int
+    accuracy: float
+
+
+class GradingResult(BaseModel):
+    meta: dict[str, Any]
+    questions: dict[str, GradedQuestionResult]
+    summary: GradingSummary
 
 
 @dataclass(slots=True)
