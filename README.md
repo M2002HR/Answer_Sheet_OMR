@@ -55,7 +55,7 @@ python -m omr_reader batch \
 
 ## تنظیم Threshold و Config
 
-بدون config اضافی، تنظیمات پیش‌فرض از کد خوانده می‌شوند. برای override می‌توان فایل `JSON` داد:
+بدون config اضافی، تنظیمات پیش‌فرض از کد خوانده می‌شوند. برای override می‌توان فایل `JSON` یا `YAML` داد:
 
 ```json
 {
@@ -84,7 +84,7 @@ python -m omr_reader batch \
 python -m omr_reader analyze \
   --image assets/sample_sheet.png \
   --template templates/answer_sheet_template.json \
-  --config config.json \
+  --config config.yaml \
   --out outputs/result.json
 ```
 

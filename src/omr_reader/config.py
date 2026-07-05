@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from .models import OMRConfig
 
 
@@ -16,5 +18,8 @@ def load_config(config_path: str | Path | None) -> OMRConfig:
         return default_config()
     path = Path(config_path)
     raw_text = path.read_text(encoding="utf-8")
-    data = json.loads(raw_text)
+    if path.suffix.lower() in {".yaml", ".yml"}:
+        data = yaml.safe_load(raw_text) or {}
+    else:
+        data = json.loads(raw_text)
     return OMRConfig.model_validate(data)
